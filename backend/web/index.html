@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#102b25" />
+  <meta name="description" content="KISAN-X — farmer-first field intelligence powered by Earth observation and local knowledge." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/assets/app.css" />
+  <link rel="stylesheet" href="/assets/payments.css" />
+  <title>KISAN-X — Field intelligence</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">K<span>×</span></div>
+        <div><div class="brand-name">KISAN-X</div><div class="brand-sub">FIELD INTELLIGENCE</div></div>
+      </div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="overview"><span class="nav-ico">⌂</span>Overview</button>
+        <button class="nav-item" data-view="farms"><span class="nav-ico">▦</span>My farms</button>
+        <button class="nav-item" data-view="satellite"><span class="nav-ico">◉</span>Earth intelligence</button>
+        <button class="nav-item" data-view="rotation"><span class="nav-ico">⟳</span>Crop rotation</button>
+        <button class="nav-item" data-view="soil"><span class="nav-ico">♧</span>Soil & water</button>
+        <button class="nav-item" data-view="weather"><span class="nav-ico">☼</span>Weather</button>
+        <button class="nav-item" data-view="calendar"><span class="nav-ico">▤</span>Crop calendar</button>
+      </nav>
+      <div class="workspace-label more-label">FIELD TOOLS</div>
+      <nav class="main-nav" aria-label="Field tools">
+        <button class="nav-item" data-view="doctor"><span class="nav-ico">✳</span>Crop Doctor <span class="nav-tag">BETA</span></button>
+        <button class="nav-item" data-view="research"><span class="nav-ico">⌘</span>Research lab</button>
+        <button class="nav-item" data-view="insights"><span class="nav-ico">◫</span>Field insights</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="offline-card"><div class="offline-dot"></div><div><strong>Farmer-first mode</strong><small>Records designed for low connectivity</small></div></div>
+      <button class="nav-item" data-view="settings"><span class="nav-ico">⚙</span>Settings & APIs</button>
+      <button class="nav-item" data-view="plans"><span class="nav-ico">◇</span>Plans & billing</button>
+      <div class="user-mini"><div class="avatar">FX</div><div><strong>Field workspace</strong><small>Ramtek pilot · Demo</small></div><span class="more-dots">•••</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left"><button class="icon-btn mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbCurrent">Overview</strong></div></div>
+        <div class="topbar-right">
+          <span class="live-indicator"><i></i> DEMO ENVIRONMENT</span>
+          <select id="languageSelect" class="language-select" aria-label="Select language">
+            <option value="en">English</option><option value="hi-IN">हिन्दी</option><option value="mr-IN">मराठी</option><option value="bn-IN">বাংলা</option><option value="gu-IN">ગુજરાતી</option><option value="pa-IN">ਪੰਜਾਬੀ</option><option value="ta-IN">தமிழ்</option><option value="te-IN">తెలుగు</option><option value="kn-IN">ಕನ್ನಡ</option><option value="ml-IN">മലയാളം</option><option value="or-IN">ଓଡ଼ିଆ</option><option value="ur-IN">اردو</option><option value="es-ES">Español</option><option value="pt-BR">Português</option><option value="fr-FR">Français</option>
+          </select>
+          <button class="icon-btn notification-btn" id="helpTop" title="Help">?</button>
+        </div>
+      </header>
+
+      <div class="page-content" id="pageContent">
+        <section class="view active" id="view-overview">
+          <div class="welcome-row"><div><div class="eyebrow">FIELD WORKSPACE <span class="eyebrow-dot"></span> LOCATION FROM SAVED FARM PROFILE</div><h1>Your fields. <em>Clearer decisions.</em></h1><p class="subheading">A connected view of your land, local conditions and next-season choices.</p></div><button class="primary-btn" data-goto="farms">＋ Add a farm</button></div>
+          <div class="notice-strip"><span class="notice-icon">✦</span><span><strong>Field Shift challenge workspace</strong> · Compare crop rotations using Earth observations, soil information and farmer priorities.</span><button class="text-btn" data-goto="rotation">Explore rotation →</button></div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span>FARM PARCELS</span><span class="metric-symbol green">&#9638;</span></div><div class="metric-value" id="parcelCount">0</div><div class="metric-foot">Saved farmer-drawn boundary estimates</div></article>
+            <article class="metric-card"><div class="metric-top"><span>DATA SOURCES</span><span class="metric-symbol blue">&#9673;</span></div><div class="metric-value">13<span class="metric-unit"> dataset adapters</span></div><div class="metric-foot">Live, catalog-only and fallback status in the map</div></article>
+            <article class="metric-card"><div class="metric-top"><span>SOIL REPORT</span><span class="metric-symbol amber">♧</span></div><div class="metric-value">—</div><div class="metric-foot">Add a measured report to continue</div></article>
+            <article class="metric-card"><div class="metric-top"><span>KRISHIQ</span><span class="metric-symbol purple">✳</span></div><div class="metric-value">Ready</div><div class="metric-foot">Free knowledge chat is available</div></article>
+          </div>
+          <div class="content-grid overview-grid">
+            <section class="panel map-preview-panel"><div class="panel-head"><div><div class="panel-kicker">EARTH INTELLIGENCE</div><h2>Satellite view</h2></div><button class="link-btn" data-goto="satellite">Open map ↗</button></div><div class="map-preview"><div class="map-art"><div class="map-grid-lines"></div><div class="map-river"></div><div class="map-field field-a"></div><div class="map-field field-b"></div><div class="map-field field-c"></div><span class="map-label label-a">RAMTEK · NAGPUR</span><span class="map-label label-b">DEMO PARCEL</span><div class="map-compass">N<br>↑</div></div><div class="map-overlay-tag"><span class="overlay-dot"></span> NASA GIBS imagery available in map view</div></div><div class="panel-foot"><span>◌ 21.3958° N, 79.3258° E · Illustrative Ramtek centre</span><span class="muted">Not a surveyed boundary</span></div></section>
+            <section class="panel activity-panel"><div class="panel-head"><div><div class="panel-kicker">WHAT TO DO NEXT</div><h2>Farm readiness</h2></div><span class="soft-pill">3 steps</span></div><div class="readiness-list"><div class="readiness-item"><span class="step-no done">✓</span><div><strong>Explore the satellite map</strong><small>View the region and draw a parcel boundary</small></div><button data-goto="satellite">Open</button></div><div class="readiness-item"><span class="step-no">2</span><div><strong>Add a soil report</strong><small>Enter measured values from a lab or Soil Health Card</small></div><button data-goto="soil">Add</button></div><div class="readiness-item"><span class="step-no">3</span><div><strong>Compare rotation scenarios</strong><small>Explore options based on priorities</small></div><button data-goto="rotation">Compare</button></div></div><div class="tip-card"><span>✦</span><div><strong>KrishiQ can guide every step</strong><small>Tap the assistant button and say “Open my satellite map”.</small></div></div></section>
+          </div>
+          <div class="section-heading"><div><div class="panel-kicker">CONNECTED EVIDENCE</div><h2>Data is only useful when its limits are clear.</h2></div><span class="muted">Source-aware by design</span></div>
+          <div class="source-grid"><article class="source-card"><span class="source-icon nasa">N</span><div><strong>NASA Earth observations</strong><small>GPM rainfall · MODIS vegetation · SMAP context · POWER weather</small></div><span class="source-status">PUBLIC</span></article><article class="source-card"><span class="source-icon copernicus">S</span><div><strong>Copernicus Sentinel-2</strong><small>Complementary finer optical monitoring; not a NASA mission</small></div><span class="source-status">CATALOG</span></article><article class="source-card"><span class="source-icon imd">I</span><div><strong>India Meteorological Department</strong><small>Forecasts, warnings and agromet advisories</small></div><span class="source-status">NOT CONNECTED</span></article></div>
+        </section>
+
+        <section class="view" id="view-farms"><div class="page-title-row"><div><div class="eyebrow">FARM FOUNDATION</div><h1>My farms</h1><p class="subheading">Keep your fields, crops and observations together.</p></div><button class="primary-btn" id="createFarmBtn">＋ Create farm</button></div><div class="panel"><div class="panel-head"><div><div class="panel-kicker">FARM REGISTER</div><h2>Your workspace</h2></div><span class="soft-pill" id="farmCounter">Loading farms...</span></div><div id="farmList" class="farm-list"></div></div><div class="two-col"><div class="panel"><div class="panel-kicker">PARCEL BOUNDARIES</div><h2>Draw your field</h2><p class="body-copy">Open the satellite map, choose “Draw field”, then tap or click the boundary points. The result is a farmer-drawn estimate—not a legal land survey.</p><button class="secondary-btn" data-goto="satellite">Open map and draw ↗</button></div><div class="panel"><div class="panel-kicker">CROP SEASON REGISTER</div><h2>What is growing?</h2><p class="body-copy">Register the crop, variety if known, sowing date and crop stage. These details are essential to interpret satellite observations.</p><button class="secondary-btn" data-goto="calendar">Open crop calendar ↗</button></div></div></section>
+
+        <section class="view satellite-studio" id="view-satellite">
+          <section class="satellite-hero">
+            <div class="sat-hero-topline">
+              <div class="sat-hero-eyebrow"><span class="sat-live-dot"></span> EARTH INTELLIGENCE <span class="sat-eyebrow-divider">/</span> FIELD SHIFT CHALLENGE</div>
+              <span class="sat-hero-chip">RAMTEK · NAGPUR PILOT</span>
+            </div>
+            <div class="sat-hero-main">
+              <div class="sat-hero-copy">
+                <h1>Read the land.<br><em>Plan with evidence.</em></h1>
+                <p>Explore satellite observations and climate history for your area. Understand what the data shows - and what it cannot tell you - before comparing crop sequences.</p>
+                <div class="sat-hero-actions">
+                  <button class="sat-primary-action" data-goto="rotation"><span>Explore Rotation Lab</span><b>↗</b></button>
+                  <button class="sat-ghost-action" id="satelliteAskKrishiQ" data-prompt="Explain the satellite data for my farm in simple language">Ask KrishiQ <span>✦</span></button>
+                </div>
+              </div>
+              <div class="sat-hero-orbit" aria-hidden="true">
+                <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit-core"><span>EARTH</span><strong>OBSERVE<br/>·<br/>UNDERSTAND</strong></div><span class="orbit-satellite">✦</span><span class="orbit-point"></span>
+              </div>
+              <div class="sat-hero-farm">
+                <span class="sat-farm-label">ACTIVE STUDY AREA</span>
+                <strong>Ramtek</strong>
+                <span>Nagpur district - Maharashtra</span>
+                <div class="sat-farm-coords">21.3958 N <i></i> 79.3258 E</div>
+                <small>Illustrative demo centre; not a surveyed farm location.</small>
+              </div>
+            </div>
+            <div class="sat-hero-bottom"><span>NASA EARTH OBSERVATIONS</span><span class="sat-bottom-sep"></span><span>LOCAL AGRONOMY</span><span class="sat-bottom-sep"></span><span>EXPLAINABLE DECISIONS</span><span class="sat-bottom-note">Evidence first. Advice only when inputs support it.</span></div>
+          </section>
+
+          <div class="sat-kpi-row" aria-label="Earth observation summary">
+            <article class="sat-kpi-card"><span class="sat-kpi-icon sat-kpi-nasa">N</span><div><small>MAP SERVICE</small><strong>NASA GIBS</strong><em>Public visualisation layers</em></div><span class="sat-kpi-mark">01</span></article>
+            <article class="sat-kpi-card"><span class="sat-kpi-icon sat-kpi-rain">≈</span><div><small>RAINFALL CONTEXT</small><strong>GPM IMERG</strong><em>Regional gridded estimates</em></div><span class="sat-kpi-mark">02</span></article>
+            <article class="sat-kpi-card"><span class="sat-kpi-icon sat-kpi-moisture">◌</span><div><small>MOISTURE CONTEXT</small><strong>SMAP L4</strong><em>Regional model-assisted data</em></div><span class="sat-kpi-mark">03</span></article>
+            <article class="sat-kpi-card"><span class="sat-kpi-icon sat-kpi-veg">⌁</span><div><small>VEGETATION HISTORY</small><strong>Landsat WELD</strong><em>Monthly NDVI visualisation</em></div><span class="sat-kpi-mark">04</span></article>
+          </div>
+
+          <section class="panel" style="margin:14px 0"><div class="panel-head"><div><div class="panel-kicker">NASA DATA CONNECTORS</div><h2>Open dataset status</h2></div><button class="secondary-btn" id="loadSatelliteMetrics" type="button">Query 13 sources</button></div><p class="micro-note">Catalog metadata, live numeric feeds and synthetic fallbacks are shown with separate provenance labels. Mock metrics are never observations.</p><div id="satelliteMetricsResults" class="satellite-metric-list"><div class="empty-inline">Choose Query 13 sources to request the backend open-access source hub at the current map centre.</div></div></section>
+          <section class="sat-console" id="satelliteMainPanel">
+            <div class="sat-console-heading">
+              <div><div class="sat-section-label">01 / OBSERVATION WORKSPACE</div><h2>Explore satellite evidence</h2><p>Choose a data layer, select a date and inspect the region around your study area.</p></div>
+              <div class="sat-service-state"><span class="sat-state-light"></span><span id="satelliteStatus" role="status" aria-live="polite">Connecting to NASA GIBS visualisation services…</span></div>
+            </div>
+
+            <div class="sat-layer-switcher">
+              <div class="sat-layer-switcher-head"><span>DATA LAYERS</span><span>Choose what you want to explore</span></div>
+              <div class="sat-layer-tabs" role="group" aria-label="Satellite data layers">
+                <button type="button" class="sat-layer-tab active" data-satellite-layer="modis_terra_truecolor" aria-pressed="true"><span class="sat-tab-glyph glyph-modis">◈</span><span><strong>True colour</strong><small>MODIS · NASA</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="modis_aqua_truecolor" aria-pressed="false"><span class="sat-tab-glyph glyph-modis">◈</span><span><strong>Aqua view</strong><small>MODIS Aqua · NASA</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="imerg_precipitation" aria-pressed="false"><span class="sat-tab-glyph glyph-rain">≈</span><span><strong>Rainfall</strong><small>GPM · NASA</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="smap_surface" aria-pressed="false"><span class="sat-tab-glyph glyph-moisture">◌</span><span><strong>Surface moisture</strong><small>SMAP · NASA</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="smap_rootzone" aria-pressed="false"><span class="sat-tab-glyph glyph-root">⌁</span><span><strong>Root-zone</strong><small>SMAP · NASA</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="landsat_weld_ndvi" aria-pressed="false"><span class="sat-tab-glyph glyph-ndvi">◍</span><span><strong>Vegetation</strong><small>NDVI · Landsat</small></span></button>
+                <button type="button" class="sat-layer-tab" data-satellite-layer="viirs_snpp_thermal_anomalies" aria-pressed="false"><span class="sat-tab-glyph glyph-rain">♨</span><span><strong>Thermal alerts</strong><small>VIIRS · Suomi-NPP</small></span></button>
+              </div>
+              <select id="satelliteLayerSelect" class="sat-hidden-select" aria-hidden="true" tabindex="-1">
+                <option value="modis_terra_truecolor">NASA MODIS Terra true colour</option><option value="modis_aqua_truecolor">NASA MODIS Aqua true colour</option><option value="imerg_precipitation">NASA GPM IMERG precipitation rate</option><option value="smap_surface">NASA SMAP surface soil moisture</option><option value="smap_rootzone">NASA SMAP root-zone soil moisture</option><option value="landsat_weld_ndvi">Landsat WELD monthly NDVI</option><option value="viirs_snpp_thermal_anomalies">Suomi-NPP VIIRS thermal anomalies</option>
+              </select>
+            </div>
+
+            <div class="sat-filterbar">
+              <div class="sat-date-control"><span class="sat-control-icon">◷</span><div class="sat-control-copy"><label for="satelliteDate">OBSERVATION DATE</label><input type="date" id="satelliteDate" /></div><button class="sat-apply-date" id="applySatelliteDate">Apply date</button><button class="sat-latest-date" id="latestSatelliteDate">Latest available</button></div>
+              <div class="sat-opacity-control"><label for="layerOpacity">LAYER OPACITY <strong id="layerOpacityValue">78%</strong></label><input type="range" id="layerOpacity" min="15" max="100" value="78" /></div>
+              <div class="sat-filter-note"><span>i</span><span>Historical / observed imagery - not a weather forecast.</span></div>
+            </div>
+
+            <div class="sat-map-inspector-grid">
+              <div class="sat-map-card">
+                <div class="sat-map-card-head"><div><span class="sat-section-label">MAP CANVAS</span><strong id="mapLayerLegend">NASA MODIS true colour</strong><small>Pan, zoom and select points on the map</small></div><div class="sat-map-actions"><button class="sat-map-tool" id="mapZoomToField" type="button" title="Zoom to field">⌖ <span>My field</span></button><button class="sat-map-tool" id="expandSatelliteMap" type="button" title="Expand map">⤢ <span>Expand</span></button></div></div>
+                <div class="sat-map-frame"><div id="farmMap" role="application" aria-label="Interactive satellite and field map centred on your selected field or the illustrative default"></div><div class="sat-map-fallback" id="satMapFallback"><div><span>⌖</span><strong>Map tiles need an internet connection</strong><small>Reconnect to load the basemap and NASA imagery layers.</small></div></div><div class="sat-map-floating-label"><span class="sat-map-dot"></span><span>EARTH OBSERVATION MAP</span><i>DEMO AREA</i></div><div class="sat-map-north">N<br/><b>↑</b></div></div>
+                <div class="sat-map-legend"><span><i class="legend-square nasa-legend"></i><span id="mapLegendProduct">NASA imagery layer</span></span><span><i class="legend-square field-legend"></i>Farmer-drawn boundary</span><span class="sat-map-credit">© OpenStreetMap · NASA GIBS</span></div>
+                <div class="sat-map-statusbar"><span class="sat-map-status-icon">⌖</span><span id="drawStatus">Ready. Draw your boundary or explore the illustrative demo area.</span><span class="sat-map-scale-note">Boundary area is an estimate</span></div>
+              </div>
+
+              <aside class="sat-inspector-card">
+                <div class="sat-inspector-top"><div><span class="sat-section-label">02 / DATA EXPLAINER</span><div class="sat-product-pill"><i></i><span id="selectedLayerBadge">NASA VISUALISATION</span></div></div><span class="sat-inspector-index">PRODUCT 01</span></div>
+                <h3 id="selectedLayerTitle">NASA MODIS Terra true colour</h3>
+                <p id="selectedLayerSummary" class="sat-inspector-summary">Corrected-reflectance imagery for visual landscape and seasonal context.</p>
+                <div class="sat-meta-grid" id="selectedLayerMetadata"></div>
+                <div class="sat-limit-box"><span class="sat-limit-icon">!</span><div><strong>Read this data carefully</strong><p id="selectedLayerLimit">MODIS pixels are much larger than many small farms. Use this for landscape context, not detailed diagnosis.</p></div></div>
+                <div class="sat-boundary-block"><div class="sat-boundary-title"><span class="sat-section-label">YOUR FIELD BOUNDARY</span><label class="sat-toggle"><input type="checkbox" id="boundaryToggle" checked/><span></span></label></div><div class="sat-boundary-description"><span class="sat-boundary-marker">⌖</span><div><select id="boundaryFarmSelect" aria-label="Choose a farm boundary"><option value="">No saved farms</option></select><small id="boundaryFarmNote">Illustrative centre; not a verified farm boundary</small></div></div><div class="sat-boundary-actions"><button class="sat-draw-action" id="drawBoundaryBtn">＋ Draw field</button><button class="sat-save-action" id="saveBoundaryBtn" disabled>Save boundary</button></div><button class="sat-reset-action" id="resetBoundaryBtn">Reset visible boundary</button></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="sat-support-grid">
+            <article class="sat-support-card sat-power-card">
+              <div class="sat-support-top"><span class="sat-support-icon power-icon">N</span><span class="sat-source-tag">NASA POWER</span></div>
+              <div class="sat-section-label">03 / CLIMATE BASELINE</div><h3>Understand the rainfall season</h3>
+              <p>Request daily gridded climate data for the map centre. Use this as historical / recent regional context, not as a farm rain gauge or forecast.</p>
+              <div class="sat-inline-controls"><label for="powerDays">Time window</label><select id="powerDays"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="60">Last 60 days</option><option value="90">Last 90 days</option></select><button class="sat-inline-primary" id="loadPowerContext">Load data <span>→</span></button></div>
+              <div class="power-context-results sat-power-results" id="powerContextResults"><div class="sat-empty-state"><span>◷</span><div><strong>Climate context not loaded</strong><small>Choose a time window and request NASA POWER data.</small></div></div></div>
+            </article>
+
+            <article class="sat-support-card sat-sentinel-card">
+              <div class="sat-support-top"><span class="sat-support-icon sentinel-icon">S2</span><span class="sat-source-tag sat-source-esa">ESA / COPERNICUS</span></div>
+              <div class="sat-section-label">04 / HIGHER-DETAIL DISCOVERY</div><h3>Find Sentinel-2 observations</h3>
+              <p>Search optical scene metadata over your field boundary. Sentinel-2 is complementary ESA data, not a NASA satellite.</p>
+              <div class="sat-sentinel-form"><div class="field-group"><label for="sentinelStartDate">FROM</label><input type="date" id="sentinelStartDate" /></div><div class="field-group"><label for="sentinelEndDate">TO</label><input type="date" id="sentinelEndDate" /></div><div class="field-group"><label for="sentinelCloudLimit">CLOUD LIMIT</label><select id="sentinelCloudLimit"><option value="20">≤ 20%</option><option value="40" selected>≤ 40%</option><option value="60">≤ 60%</option><option value="80">≤ 80%</option><option value="100">Any</option></select></div></div>
+              <button class="sat-inline-primary sat-sentinel-submit" id="searchSentinelBtn">Search available scenes <span>→</span></button>
+              <div class="sat-sentinel-status" id="sentinelSearchStatus" aria-live="polite">Choose a date range. A saved or illustrative boundary will be used.</div>
+              <div class="sentinel-results sat-sentinel-results" id="sentinelSceneResults"></div>
+            </article>
+          </section>
+
+          <section class="sat-decision-bridge">
+            <div class="sat-bridge-icon">↗</div><div class="sat-bridge-copy"><span class="sat-section-label">05 / FROM OBSERVATION TO DECISION</span><h3>Bring the evidence into your crop plan.</h3><p>Combine climate history with soil-test values, previous crops, water availability and locally reviewed crop rules. Satellite imagery alone does not choose a crop.</p></div><button class="sat-bridge-button" data-goto="rotation">Open Rotation Lab <span>→</span></button>
+          </section>
+
+          <section class="sat-integrity-strip"><div class="sat-integrity-symbol">✓</div><div><strong>Evidence integrity is built into KISAN-X.</strong><span>Every layer must show its source, date, spatial scale, units and limitations. NASA POWER is a gridded baseline; GPM is a rainfall estimate; MODIS is landscape context; soil nutrients require a verified Soil Health Card or laboratory report. Official IMD forecasts remain separate from historical satellite observations.</span></div><a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener">NASA data notes ↗</a></section>
+        </section>
+
+        <section class="view" id="view-rotation">
+          <div class="page-title-row">
+            <div><div class="eyebrow">FIELD SHIFT · RAMTEK RAINFED PILOT</div><h1>3-year crop rotation planner</h1><p class="subheading">Compare season-by-season pathways using crop history, soil information, water availability and farmer priorities.</p></div>
+            <span class="soft-pill">KRISHIQ CORE MODULE</span>
+          </div>
+          <div class="rotation-banner">
+            <div class="rotation-banner-mark">⟳</div>
+            <div><strong>Plan beyond the next harvest.</strong><p>KRISHIQ compares possible crop sequences and explains the evidence, missing information and conditions that could change the plan.</p></div>
+            <div class="rotation-banner-tag">3 YEARS · KHARIF + RABI</div>
+          </div>
+          <div class="rotation-summary-grid">
+            <article class="rotation-summary-card"><span>01 · CROP HISTORY</span><strong>Parcel-first</strong><small>Recent crops help avoid repeating the same family blindly.</small></article>
+            <article class="rotation-summary-card"><span>02 · SOIL MATCH</span><strong>Measured first</strong><small>Soil type and verified reports are kept separate from satellite data.</small></article>
+            <article class="rotation-summary-card"><span>03 · RAINFALL SCENARIO</span><strong>What-if planning</strong><small>Normal, delayed or deficit rainfall are scenarios—not a live forecast.</small></article>
+            <article class="rotation-summary-card"><span>04 · EXPLAINABLE</span><strong>Evidence shown</strong><small>See why a sequence appears and what must be checked locally.</small></article>
+          </div>
+          <div class="rotation-layout rotation-layout-upgraded">
+            <section class="panel form-panel rotation-input-panel">
+              <div class="panel-kicker">STEP 1 · TELL KRISHIQ ABOUT THE FIELD</div>
+              <h2>Your farm context</h2>
+              <p class="body-copy">Use what you know. Select “Not sure” where you do not have a measured value.</p>
+              <div class="field-group"><label for="districtInput">Pilot location</label><input id="districtInput" value="Ramtek, Nagpur, Maharashtra" /></div>
+              <div class="field-grid">
+                <div class="field-group"><label for="currentCrop">Most recent crop in this field</label><select id="currentCrop"><option value="soybean">Soybean</option><option value="cotton">Cotton</option><option value="pigeon pea">Pigeon pea</option><option value="sorghum">Sorghum</option><option value="green gram">Green gram</option><option value="black gram">Black gram</option><option value="pearl millet">Pearl millet</option><option value="chickpea">Chickpea</option><option value="safflower">Safflower</option></select></div>
+                <div class="field-group"><label for="previousCrop">Crop before that</label><select id="previousCrop"><option value="unknown">Not sure / not recorded</option><option value="soybean">Soybean</option><option value="cotton">Cotton</option><option value="pigeon pea">Pigeon pea</option><option value="sorghum">Sorghum</option><option value="green gram">Green gram</option><option value="black gram">Black gram</option><option value="pearl millet">Pearl millet</option><option value="chickpea">Chickpea</option><option value="safflower">Safflower</option></select></div>
+                <div class="field-group"><label for="soilType">Soil type</label><select id="soilType"><option value="unknown">Not sure</option><option value="shallow_black">Shallow black soil</option><option value="medium_black" selected>Medium black soil</option><option value="deep_black">Deep black soil</option><option value="red_light">Red / light soil</option></select></div>
+                <div class="field-group"><label for="irrigationInput">Water availability</label><select id="irrigationInput"><option value="rainfed" selected>Rainfed</option><option value="limited">Limited irrigation</option><option value="reliable">Reliable irrigation</option></select></div>
+                <div class="field-group"><label for="rainfallScenario">Rainfall planning scenario</label><select id="rainfallScenario"><option value="normal">Normal monsoon (what-if)</option><option value="delayed">Delayed monsoon (what-if)</option><option value="deficit">Below-normal rainfall (what-if)</option><option value="excess">Above-normal / excess rain (what-if)</option><option value="unknown">Not sure</option></select></div>
+                <div class="field-group"><label for="moistureInput">Post-monsoon soil moisture</label><select id="moistureInput"><option value="unknown">Not measured / not sure</option><option value="low">Low</option><option value="adequate">Adequate (farmer observation)</option></select></div>
+                <div class="field-group"><label for="planYear">First planning year</label><select id="planYear"><option>2027</option><option>2028</option><option>2029</option></select></div>
+                <div class="field-group"><label for="fieldArea">Field area (hectares)</label><input id="fieldArea" type="number" min="0.01" max="10000" step="0.01" placeholder="Optional" /></div>
+              </div>
+              <div class="divider"></div>
+              <div class="panel-kicker">STEP 2 · SOIL REPORT (OPTIONAL)</div>
+              <p class="body-copy">Only enter values copied from a Soil Health Card or laboratory report. They are saved as farmer-provided measurements.</p>
+              <div class="field-grid">
+                <div class="field-group"><label for="soilPH">Soil pH</label><input id="soilPH" type="number" min="3" max="10" step="0.1" placeholder="Measured value" /></div>
+                <div class="field-group"><label for="organicCarbon">Organic carbon (%)</label><input id="organicCarbon" type="number" min="0" max="10" step="0.1" placeholder="Measured value" /></div>
+              </div>
+              <label class="check-row"><input type="checkbox" id="verifiedSoil" /> I copied these values from a soil report</label>
+              <div class="divider"></div>
+              <div class="panel-kicker">STEP 3 · YOUR PRIORITIES</div>
+              <div class="slider-group"><div class="slider-label"><label for="waterPriority">Conserve water</label><output id="waterPriorityValue">5 / 5</output></div><input type="range" min="1" max="5" value="5" id="waterPriority" /></div>
+              <div class="slider-group"><div class="slider-label"><label for="soilPriority">Soil diversity and fertility</label><output id="soilPriorityValue">5 / 5</output></div><input type="range" min="1" max="5" value="5" id="soilPriority" /></div>
+              <div class="slider-group"><div class="slider-label"><label for="incomePriority">Income stability</label><output id="incomePriorityValue">3 / 5</output></div><input type="range" min="1" max="5" value="3" id="incomePriority" /></div>
+              <button class="primary-btn full-width rotation-generate-btn" id="runRotationBtn">Generate my 3-year plan <span>→</span></button>
+              <p class="micro-note">The fit score is a transparent prototype comparison, not a yield, income or climate prediction. Actual field advice needs local expert review.</p>
+            </section>
+            <section class="panel results-panel rotation-output-panel">
+              <div class="panel-head"><div><div class="panel-kicker">YOUR ROTATION WORKSPACE</div><h2>Explore the options</h2></div><span class="soft-pill" id="scenarioState">Demo ready</span></div>
+              <div class="rotation-tabs" role="tablist" aria-label="Rotation planner sections">
+                <button class="rotation-tab active" data-rotation-tab="plan" role="tab" aria-selected="true">3-year plan</button>
+                <button class="rotation-tab" data-rotation-tab="compatibility" role="tab" aria-selected="false">Crop compatibility</button>
+                <button class="rotation-tab" data-rotation-tab="diary" role="tab" aria-selected="false">Success diary</button>
+              </div>
+              <div class="rotation-tab-pane active" id="rotationPane-plan"><div id="rotationPlanResults" class="empty-state"><div class="empty-illustration">⟳</div><h3>Your 3-year comparison</h3><p>Generate a plan to see Kharif and conditional Rabi options, assumptions and evidence.</p><button class="secondary-btn" id="tryRotationExample">Load Ramtek example</button></div></div>
+              <div class="rotation-tab-pane" id="rotationPane-compatibility" hidden>
+                <div class="compatibility-intro"><div class="panel-kicker">CROP COMPATIBILITY CHECKER</div><h3>Check two crops in sequence</h3><p>Compare crop family, season and water context. The checker does not replace disease-history or variety-specific review.</p></div>
+                <div class="field-grid"><div class="field-group"><label for="compatPrevious">Previous crop</label><select id="compatPrevious"><option value="soybean">Soybean</option><option value="cotton">Cotton</option><option value="pigeon pea">Pigeon pea</option><option value="sorghum">Sorghum</option><option value="green gram">Green gram</option><option value="chickpea">Chickpea</option><option value="pearl millet">Pearl millet</option><option value="black gram">Black gram</option><option value="safflower">Safflower</option></select></div><div class="field-group"><label for="compatNext">Following crop</label><select id="compatNext"><option value="chickpea">Chickpea</option><option value="sorghum">Sorghum</option><option value="safflower">Safflower</option><option value="green gram">Green gram</option><option value="soybean">Soybean</option><option value="pearl millet">Pearl millet</option><option value="pigeon pea">Pigeon pea</option><option value="black gram">Black gram</option></select></div></div>
+                <button class="secondary-btn" id="checkCompatibilityBtn">Check crop pair</button><div id="compatibilityResult" class="compatibility-result" aria-live="polite">Choose two crops and check their sequence.</div>
+              </div>
+              <div class="rotation-tab-pane" id="rotationPane-diary" hidden>
+                <div class="compatibility-intro"><div class="panel-kicker">CROP ROTATION SUCCESS DIARY</div><h3>Record what happened on your farm</h3><p>Use actual field records after harvest. Values are your entries, not a prediction.</p></div>
+                <div class="field-grid"><div class="field-group"><label for="diarySeason">Season / year</label><input id="diarySeason" placeholder="e.g. Kharif 2027" /></div><div class="field-group"><label for="diaryCrop">Crop grown</label><select id="diaryCrop"><option>Soybean</option><option>Cotton</option><option>Pigeon pea</option><option>Sorghum</option><option>Green gram</option><option>Chickpea</option><option>Safflower</option></select></div><div class="field-group"><label for="diaryCost">Recorded cultivation cost (₹)</label><input id="diaryCost" type="number" min="0" step="1" placeholder="Optional" /></div><div class="field-group"><label for="diaryHarvest">Actual harvest quantity (kg)</label><input id="diaryHarvest" type="number" min="0" step="0.1" placeholder="Optional" /></div><div class="field-group"><label for="diaryPrice">Actual sale price (₹ / kg)</label><input id="diaryPrice" type="number" min="0" step="0.01" placeholder="Optional" /></div></div>
+                <div class="field-group"><label for="diaryNote">What did you observe?</label><textarea id="diaryNote" rows="2" placeholder="Rain, pests, soil moisture, crop condition, harvest notes…"></textarea></div>
+                <button class="primary-btn" id="saveRotationDiaryBtn">Save farm outcome</button><div id="diaryFeedback" class="inline-feedback" aria-live="polite"></div><div id="rotationDiaryList" class="rotation-diary-list"><div class="empty-inline">Your recorded outcomes will appear here.</div></div>
+              </div>
+              <div class="rotation-footnote"><strong>Important:</strong> A Kharif–Rabi sequence is not the same as intercropping. The planner labels each season separately and does not turn a soybean + pigeon pea intercrop into a rotation pair.</div>
+            </section>
+          </div>
+          <section class="panel rotation-evidence-panel"><div class="panel-head"><div><div class="panel-kicker">WHY THESE OPTIONS APPEAR</div><h2>Local evidence and limitations</h2></div><span class="soft-pill">Sources included</span></div><div class="rotation-evidence-grid"><article><strong>PDKV Akola · AICRP Integrated Farming Systems</strong><p>Documents soybean followed by chickpea or Rabi sorghum under available profile moisture or limited irrigation in the region.</p><a href="https://www.pdkv.ac.in/?page_id=4678" target="_blank" rel="noopener">Read source ↗</a></article><article><strong>PDKV Akola · AICRP Dryland Agriculture</strong><p>Lists green gram–safflower and identifies sorghum–chickpea / soybean–chickpea sequences under specified rainfed soil and rainfall conditions.</p><a href="https://www.pdkv.ac.in/?page_id=4490" target="_blank" rel="noopener">Read source ↗</a></article><article><strong>ICAR-CRIDA · District contingency plans</strong><p>District-specific crop choices should respond to rainfall delays, drought stages, soil and local farming situation.</p><a href="https://www.icar-crida.res.in/Crop_Contingency_Plan.html" target="_blank" rel="noopener">Open contingency plans ↗</a></article></div><p class="micro-note">These references support selected crop-pair examples; they do not validate every three-year pathway generated here. Ask the local KVK / agricultural university to review the parcel-specific plan before planting.</p></section>
+        </section>
+
+        <section class="view" id="view-soil"><div class="page-title-row"><div><div class="eyebrow">MEASURED SOIL & WATER</div><h1>Soil intelligence</h1><p class="subheading">Bring a laboratory report or Soil Health Card into your farm history.</p></div><span class="soft-pill">Measurements first</span></div><div class="soil-layout"><div class="panel"><div class="panel-kicker">SOIL REPORT ENTRY</div><h2>Add measured values</h2><p class="body-copy">Copy values from a lab report. Keep the sample date and source. Satellite imagery cannot supply exact nutrient values.</p><div class="field-grid"><div class="field-group"><label>pH</label><input type="number" id="soilInputPH" min="3" max="10" step="0.1" placeholder="From report" /></div><div class="field-group"><label>Electrical conductivity</label><input id="soilEC" placeholder="e.g. dS/m" /></div><div class="field-group"><label>Organic carbon (%)</label><input type="number" id="soilOC" min="0" step="0.1" placeholder="From report" /></div><div class="field-group"><label>Nitrogen</label><input id="soilN" placeholder="Value + unit" /></div><div class="field-group"><label>Phosphorus</label><input id="soilP" placeholder="Value + unit" /></div><div class="field-group"><label>Potassium</label><input id="soilK" placeholder="Value + unit" /></div></div><div class="field-group"><label>Source / lab name</label><input id="soilSource" placeholder="Soil Health Card / lab name" /></div><div class="field-group"><label>Sample date</label><input id="soilDate" type="date" /></div><button class="primary-btn" id="saveSoilBtn">Save soil record</button><div class="inline-feedback" id="soilFeedback" aria-live="polite"></div></div><div class="panel soil-truth-panel"><div class="soil-badge">♧</div><h2>What satellites can—and cannot—tell us</h2><div class="truth-item"><span class="truth-yes">✓</span><div><strong>Can support</strong><p>Vegetation change, rainfall patterns, surface temperature context and regional moisture signals.</p></div></div><div class="truth-item"><span class="truth-no">!</span><div><strong>Cannot directly measure</strong><p>Exact soil pH, NPK or micronutrient concentrations for an individual field from optical imagery.</p></div></div><div class="truth-item"><span class="truth-yes">✓</span><div><strong>Keep evidence separate</strong><p>Mark each value as measured, remotely observed or model-estimated.</p></div></div></div></div><div class="panel report-panel"><div class="panel-head"><div><div class="panel-kicker">SOIL HISTORY</div><h2>Saved measurements</h2></div><span class="soft-pill">Local demo database</span></div><div id="soilHistory" class="empty-inline">No soil report saved yet.</div></div></section>
+
+        <section class="view" id="view-weather"><div class="page-title-row"><div><div class="eyebrow">WEATHER INTELLIGENCE</div><h1>Weather & climate context</h1><p class="subheading">Use gridded historical observations alongside official local forecasts.</p></div><button class="secondary-btn" id="refreshWeatherBtn">↻ Refresh NASA POWER</button></div><div class="panel weather-summary"><div><div class="panel-kicker">NASA POWER · DAILY SERIES</div><h2>Regional agroclimate</h2><p class="body-copy">Requesting the NASA POWER daily meteorological series for the selected regional centre. This is not a field weather station.</p><div id="weatherFeedback" class="inline-feedback">No request made yet.</div></div><div class="weather-icon">☁</div></div><div class="panel"><div class="panel-head"><div><div class="panel-kicker">DATA OUTPUT</div><h2>Latest available daily values</h2></div><span class="soft-pill" id="weatherPeriod">Waiting for NASA</span></div><div id="weatherTable" class="empty-inline">Connect to the internet and refresh to fetch NASA POWER observations.</div></div><div class="source-grid"><article class="source-card"><span class="source-icon blue">IMD</span><div><strong>IMD forecast & agromet advisory</strong><small>Official India weather warnings and agricultural advisories</small></div><a class="source-link" href="https://mausam.imd.gov.in/" target="_blank" rel="noopener">Open ↗</a></article><article class="source-card"><span class="source-icon nasa">N</span><div><strong>NASA GPM rainfall</strong><small>Regional rainfall estimates, not gauge observations</small></div><a class="source-link" href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener">Open ↗</a></article></div></section>
+
+        <section class="view" id="view-calendar"><div class="page-title-row"><div><div class="eyebrow">CROP LIFECYCLE</div><h1>Crop calendar</h1><p class="subheading">Plan around your actual sowing date and crop stage.</p></div><button class="primary-btn" id="addActivityBtn">＋ Add activity</button></div><div class="calendar-layout"><div class="panel"><div class="panel-kicker">CURRENT CROP SEASON</div><h2>Season overview</h2><div class="calendar-season"><div class="season-icon">🌱</div><div><strong>Register a crop to begin</strong><small>Variety, sowing date and stage help interpret Earth observations.</small></div></div><div class="stage-track"><div class="stage-node active">Land prep</div><div class="stage-node">Sowing</div><div class="stage-node">Vegetative</div><div class="stage-node">Flowering</div><div class="stage-node">Maturity</div><div class="stage-node">Harvest</div></div></div><div class="panel"><div class="panel-kicker">FIELD ACTIVITY LOG</div><h2>What happened in the field?</h2><div class="field-group"><label>Activity</label><select id="activityType"><option>Observation</option><option>Sowing</option><option>Irrigation</option><option>Weeding</option><option>Fertilizer application</option><option>Harvest</option></select></div><div class="field-group"><label>Date</label><input type="date" id="activityDate" /></div><div class="field-group"><label>Note (or dictate to KrishiQ)</label><textarea id="activityNote" rows="3" placeholder="Record a field observation…"></textarea></div><button class="secondary-btn" id="saveActivityBtn">Save activity</button></div></div><div class="panel"><div class="panel-kicker">RECENT RECORDS</div><div id="activityList" class="empty-inline">No activities saved in this browser session.</div></div></section>
+
+        <section class="view" id="view-doctor"><div class="page-title-row"><div><div class="eyebrow">CROP HEALTH TRIAGE</div><h1>Crop Doctor</h1><p class="subheading">Collect clear evidence before suggesting possible causes.</p></div><span class="soft-pill warning-pill">Triage prototype</span></div><div class="two-col"><div class="panel"><div class="upload-icon">◎</div><h2>Capture a crop photo</h2><p class="body-copy">Add a clear photograph of the plant or leaf. The current prototype records an inspection request; it does not claim a validated disease diagnosis.</p><label class="upload-box"><input type="file" accept="image/*" capture="environment" id="cropPhoto" /><span>＋ Choose or take a photo</span><small>Camera permission is requested by your device/browser</small></label><div class="inline-feedback" id="photoFeedback"></div></div><div class="panel"><div class="panel-kicker">CONTEXT CHECKLIST</div><h2>Help KrishiQ understand the image</h2><div class="field-group"><label>Crop</label><select id="doctorCrop"><option>Soybean</option><option>Cotton</option><option>Pigeon pea</option><option>Chickpea</option><option>Other / unknown</option></select></div><div class="field-group"><label>Growth stage</label><select><option>Not sure</option><option>Seedling</option><option>Vegetative</option><option>Flowering</option><option>Pod / fruit development</option><option>Maturity</option></select></div><div class="field-group"><label>What changed?</label><textarea rows="3" placeholder="Yellowing, spots, wilting, insects…"></textarea></div><div class="callout-note">Possible causes can overlap. This is not a pesticide prescription tool. A qualified local expert should review uncertain or high-impact cases.</div></div></div></section>
+
+        <section class="view" id="view-research"><div class="page-title-row"><div><div class="eyebrow">ORIGINAL KISAN-X R&D</div><h1>Research lab</h1><p class="subheading">Six proposed experiments, each with measurable validation gates.</p></div><span class="soft-pill warning-pill">Research prototypes</span></div><div class="research-grid" id="researchCards"></div></section>
+
+        <section class="view" id="view-insights"><div class="page-title-row"><div><div class="eyebrow">EVIDENCE & OUTCOMES</div><h1>Field insights</h1><p class="subheading">Understand what the system observed, what is missing and what happened after an action.</p></div></div><div class="two-col"><div class="panel"><div class="panel-kicker">EVIDENCE LEDGER</div><h2>Three kinds of information</h2><div class="truth-item"><span class="truth-yes">M</span><div><strong>Measured</strong><p>Lab soil tests, field measurements and verified farmer observations.</p></div></div><div class="truth-item"><span class="truth-yes">S</span><div><strong>Observed remotely</strong><p>Satellite scene date, product, resolution, cloud quality and derived index.</p></div></div><div class="truth-item"><span class="truth-no">P</span><div><strong>Predicted / inferred</strong><p>Model output with model version, uncertainty and validation coverage.</p></div></div></div><div class="panel"><div class="panel-kicker">NORTH-STAR METRIC</div><div class="big-stat">—</div><h2>Verified useful farm decisions</h2><p class="body-copy">Track useful decisions per active parcel per growing season—not downloads alone.</p></div></div><div class="panel"><div class="panel-kicker">VALIDATION GATE</div><h2>Before any advisory goes live</h2><p class="body-copy">Record source, method, date, spatial resolution, units, quality, confidence, local review and farmer outcome. An AI explanation must not invent agronomic advice.</p></div></section>
+
+        <section class="view" id="view-settings"><div class="page-title-row"><div><div class="eyebrow">PROVIDER INTEGRATIONS</div><h1>Settings & data sources</h1><p class="subheading">See which public sources the connected backend currently uses.</p></div><span class="soft-pill">No private API keys</span></div><div class="settings-layout"><section class="panel provider-panel"><div class="panel-kicker">CONNECTED PUBLIC SOURCES</div><h2>Source status</h2><p class="body-copy">This release uses public NASA POWER data and NASA GIBS imagery. NASA map tiles are browsable without a private key.</p><div id="providerList" class="provider-list"></div><div class="security-footnote">No farmer should enter NASA or AI provider credentials in this app. Protected Earthdata downloads and optional AI integrations are not enabled here.</div></section><aside class="panel integration-info"><div class="panel-kicker">DATA LIMITS</div><h2>What the map means</h2><p class="body-copy">NASA GIBS serves pre-rendered visualisations, not field-clipped statistics. POWER is gridded environmental context, not a farm sensor or a forecast. Check the selected product's scale and date before interpreting it.</p><a href="https://nasa-gibs.github.io/gibs-api-docs/" target="_blank" rel="noopener" class="source-link">NASA GIBS documentation ↗</a></aside></div></section>
+
+        <section class="view" id="view-owner"><div class="page-title-row"><div><div class="eyebrow">OWNER CONTROLS</div><h1>Payment dashboard</h1><p class="subheading">Configure direct UPI and review payment claims after checking your own account.</p></div></div><section class="panel owner-login" id="owner-login"><label>Owner PIN<input id="owner-pin" type="password" autocomplete="off" minlength="6"></label><button class="primary-btn" id="owner-unlock" type="button">Unlock dashboard</button><p id="owner-login-message" class="form-message" role="status"></p></section><div id="owner-dashboard" hidden><div class="owner-toolbar"><span>Owner session is limited to this browser tab.</span><button class="secondary-btn" id="owner-lock" type="button">Lock</button></div><div id="owner-metrics" class="owner-metrics"></div><div class="owner-grid"><form class="panel owner-settings" id="owner-settings"><h2>UPI account &amp; QR</h2><label>UPI ID<input name="upi_id" maxlength="100" placeholder="name@bank"></label><label>Payee name<input name="payee_name" maxlength="60"></label><label>QR code image<input name="qr_image" type="file" accept="image/png,image/jpeg,image/webp"></label><div id="owner-qr-preview"></div><button class="primary-btn" type="submit">Save payment settings</button><p class="form-message" id="owner-settings-message" role="status"></p></form><section class="panel owner-claims"><h2>Payment claims</h2><div id="owner-claims-list"></div></section></div><section class="panel owner-plan-editor"><h2>Plan pricing and descriptions</h2><p class="form-note">Plan access is not currently gated by subscription status.</p><div id="owner-tier-list"></div><button class="primary-btn" id="save-owner-tiers" type="button">Save plan edits</button><p class="form-message" id="owner-tier-message" role="status"></p></section></div></section>
+        <section class="view" id="view-plans"><div class="page-title-row"><div><div class="eyebrow">DIRECT UPI &middot; MANUAL VERIFICATION</div><h1>Plans for your workspace</h1><p class="subheading">Plans and payment settings load from the connected Kisan X backend.</p></div><button class="secondary-btn" data-goto="owner">Owner payment settings</button></div><div class="payment-status" id="payment-status"><label>Check plan status with your mobile number<input id="plan-phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number"></label><button class="secondary-btn" id="check-payment-status" type="button">Check status</button><div id="payment-status-result"></div></div><div id="plan-grid" class="plan-grid"><div class="loading-card">Loading plans...</div></div><div class="panel payment-info"><strong>Payment safety:</strong> payment is made directly in your UPI app. The owner verifies the credit before activating a plan. Never share a UPI PIN, password or OTP here.</div></section>
+      </div>
+      <footer class="app-footer"><span>© 2026 KISAN-X · THE SENTINELS</span><span>Evidence before advice <b>•</b> Farmer-owned data <b>•</b> Honest uncertainty</span></footer>
+    </main>
+  </div>
+
+  <button class="krishiq-launcher" id="krishiqLauncher" aria-label="Open KrishiQ assistant"><span class="krishiq-spark">✦</span><span>Ask KrishiQ</span><kbd>⌘ K</kbd></button>
+  <section class="krishiq-panel" id="krishiqPanel" aria-label="KrishiQ assistant" hidden>
+    <div class="krishiq-head"><div class="krishiq-avatar">K<span>Q</span></div><div><strong>KrishiQ</strong><small>Local guidance · no field diagnosis</small></div><button class="icon-btn" id="closeKrishiq" aria-label="Close assistant">×</button></div>
+    <div class="krishiq-welcome"><div class="mini-eyebrow">FARMER-FIRST ASSISTANT</div><p>Namaste! Tell me what you want to do. You can speak instead of typing.</p><div class="quick-prompts"><button data-prompt="Open my satellite map">Open map</button><button data-prompt="Explain crop rotation">Crop rotation</button><button data-prompt="What is soil health card?">Soil help</button></div></div>
+    <div class="chat-messages" id="chatMessages" aria-live="polite"><div class="chat-bubble assistant-bubble">I can guide you around KISAN-X and explain its information. For a specific field recommendation, we will need local evidence.</div></div>
+    <form class="chat-form" id="chatForm"><button type="button" class="mic-btn" id="micBtn" aria-label="Speak"><span>🎙</span></button><input id="chatInput" placeholder="Ask or speak…" autocomplete="off" /><button class="send-btn" aria-label="Send message">↑</button></form>
+    <div class="chat-foot"><span id="voiceStatus">Tap the microphone to speak</span><button id="speakToggle" class="text-btn">Voice: on</button></div>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/assets/app.js"></script>
+  <script src="/assets/payments.js"></script>
+  <div class="payment-modal" id="payment-modal" hidden><section class="payment-dialog" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title"><header><div><span class="panel-kicker">DIRECT UPI PAYMENT</span><h2 id="payment-modal-title">Upgrade plan</h2></div><div><button type="button" id="listen-plan" class="secondary-btn">Listen</button><button type="button" id="close-payment" class="secondary-btn" aria-label="Close">Close</button></div></header><div id="payment-modal-content"></div></section></div>
+  <div class="payment-modal" id="proof-modal" hidden><section class="payment-dialog proof-dialog" role="dialog" aria-modal="true" aria-label="Payment proof"><button type="button" id="close-proof" class="secondary-btn">Close proof</button><img id="proof-image" alt="Private payment proof submitted by farmer"></section></div>
+</body>
+</html>

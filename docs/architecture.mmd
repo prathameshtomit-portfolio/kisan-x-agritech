@@ -1,0 +1,12 @@
+flowchart TD
+    A[Flutter Android App] -->|Farm profile / comparison / scenario| B[FastAPI REST API]
+    B --> C[Farm Profile Service]
+    B --> D[NASA POWER Adapter]
+    D --> E[Normalizer + TTL Cache]
+    B --> F[Crop Profile + Rule Catalogue]
+    F --> G[Evidence-aware Rotation Engine]
+    C --> G
+    E --> G
+    G --> H[Explainability + Report Payload]
+    H --> I[(SQLite local / PostgreSQL configured)]
+    H --> A

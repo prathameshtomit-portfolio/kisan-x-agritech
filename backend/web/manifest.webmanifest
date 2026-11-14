@@ -1,0 +1,11 @@
+{
+  "name": "KISAN-X + KrishiQ",
+  "short_name": "KISAN-X",
+  "description": "Farmer-first crop rotation and Earth observation decision support.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f7f2",
+  "theme_color": "#102b25",
+  "icons": [{"src":"/assets/mark.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
