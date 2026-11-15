@@ -1,0 +1,20 @@
+{
+  "name": "Illustrative demo parcel — not a real farmer record",
+  "latitude": 21.1458,
+  "longitude": 79.0882,
+  "region": "Nagpur",
+  "season": "kharif",
+  "area_value": 1.0,
+  "area_unit": "hectare",
+  "crop_history": [],
+  "irrigation": null,
+  "soil_fields": {
+    "pH": null,
+    "electrical_conductivity_dS_m": null,
+    "organic_carbon_pct": null,
+    "nitrogen_kg_ha": null,
+    "phosphorus_kg_ha": null,
+    "potassium_kg_ha": null
+  },
+  "priorities": ["water_demand"]
+}

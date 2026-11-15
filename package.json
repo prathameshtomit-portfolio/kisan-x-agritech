@@ -1,0 +1,25 @@
+{
+  "name": "kisanx-krishiq-native-shells",
+  "private": true,
+  "version": "0.3.1",
+  "type": "module",
+  "scripts": {
+    "native:build": "node tools/build-native-web.mjs",
+    "android:init": "cap add android",
+    "android:assets": "capacitor-assets generate --android --iconBackgroundColor '#11131d' --iconBackgroundColorDark '#11131d' --splashBackgroundColor '#11131d' --splashBackgroundColorDark '#11131d'",
+    "android:sync": "npm run native:build && cap sync android",
+    "android:debug": "npm run android:sync && node tools/run-gradle.mjs assembleDebug",
+    "desktop:build": "npm run native:build && tauri icon assets/logo.png --output src-tauri/icons && tauri build --bundles nsis"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.0.0",
+    "@tauri-apps/cli": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}
